@@ -104,7 +104,7 @@ public class OperationInfoDocAdapter extends BaseNuxeoArtifactDocAdapter
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Param> getParams() {
+    public Param[] getParams() {
         List<Map<String, Serializable>> maps;
         try {
             maps = (List<Map<String, Serializable>>) doc.getPropertyValue(PROP_PARAMS);
@@ -127,7 +127,7 @@ public class OperationInfoDocAdapter extends BaseNuxeoArtifactDocAdapter
                 params.add(p);
             }
         }
-        return params;
+        return params.toArray(new Param[params.size()]);
     }
 
     @Override
@@ -183,8 +183,8 @@ public class OperationInfoDocAdapter extends BaseNuxeoArtifactDocAdapter
         }
         return new OperationInfoDocAdapter(doc);
     }
-    
-    
+
+
     @Override
     public String getOperationClass() {
         return safeGet(PROP_OP_CLASS);
