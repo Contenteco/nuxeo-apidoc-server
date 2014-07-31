@@ -313,7 +313,7 @@ public class Distribution extends ModuleRoot {
             tmpFile.delete();
             tmpFile = new File(fPath);
         }
-        tmpFile.deleteOnExit();
+        Framework.trackFile(tmpFile, tmpFile);
         return tmpFile;
     }
 
