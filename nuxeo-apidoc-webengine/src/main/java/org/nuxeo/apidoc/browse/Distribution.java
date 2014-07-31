@@ -1,10 +1,10 @@
 /*
- * (C) Copyright 2006-2010 Nuxeo SA (http://nuxeo.com/) and contributors.
+ * (C) Copyright 2006-2014 Nuxeo SA (http://nuxeo.com/) and contributors.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the GNU Lesser General Public License
  * (LGPL) version 2.1 which accompanies this distribution, and is available at
- * http://www.gnu.org/licenses/lgpl.html
+ * http://www.gnu.org/licenses/lgpl-2.1.html
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -35,6 +35,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import org.nuxeo.apidoc.documentation.DocumentationService;
 import org.nuxeo.apidoc.export.ArchiveFile;
 import org.nuxeo.apidoc.snapshot.DistributionSnapshot;
@@ -119,7 +120,7 @@ public class Distribution extends ModuleRoot {
         List<DistributionSnapshot> snaps = getSnapshotManager().listPersistentSnapshots(
                 (ctx.getCoreSession()));
 
-        List<String> keys = new ArrayList<String>();
+        List<String> keys = new ArrayList<>();
         for (DistributionSnapshot snap : snaps) {
             if (snap.getName().equalsIgnoreCase("Nuxeo Platform")) {
                 keys.add(snap.getKey());
@@ -129,16 +130,15 @@ public class Distribution extends ModuleRoot {
         }
 
         String latest = "current";
-        if (keys.size()>0) {
+        if (keys.size() > 0) {
             latest = keys.get(0);
         }
-        return ctx.newObject("redirectWO", "latest",
-                latest);
+        return ctx.newObject("redirectWO", "latest", latest);
     }
 
     @Path("{distributionId}")
-    public Resource viewDistribution(@PathParam("distributionId")
-    String distributionId) {
+    public Resource viewDistribution(
+            @PathParam("distributionId") String distributionId) {
         try {
             if (distributionId == null || "".equals(distributionId)) {
                 return this;
@@ -335,8 +335,8 @@ public class Distribution extends ModuleRoot {
 
     @GET
     @Path("download/{distributionId}")
-    public Response downloadDistrib(@PathParam("distributionId")
-    String distribId) throws Exception {
+    public Response downloadDistrib(
+            @PathParam("distributionId") String distribId) throws Exception {
         File tmp = getExportTmpFile();
         tmp.createNewFile();
         OutputStream out = new FileOutputStream(tmp);
@@ -380,8 +380,9 @@ public class Distribution extends ModuleRoot {
         }
         DocumentModel snap = getSnapshotManager().importTmpSnapshot(
                 getContext().getCoreSession(), blob.getStream());
-        if (snap==null) {
+        if (snap == null) {
             log.error("Unable to import archive");
+            return null;
         }
         DistributionSnapshot snapObject = snap.getAdapter(DistributionSnapshot.class);
         return getView("uploadEdit").arg("tmpSnap", snap).arg("snapObject",
